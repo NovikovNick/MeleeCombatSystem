@@ -8,7 +8,15 @@ public class MeleeCombatSystem : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.NoPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[] { 
+			"Core", 
+			"CoreUObject", 
+			"Engine", 
+			"InputCore", 
+			"EnhancedInput", 
+			"OnlineServicesInterface",
+			"CoreOnline"  
+		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
