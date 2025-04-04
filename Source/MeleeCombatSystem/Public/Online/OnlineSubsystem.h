@@ -12,6 +12,8 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogOnlineSubsystem, All, All);
 
+DECLARE_MULTICAST_DELEGATE(FOnLogin);
+
 struct OnlineUserInfo
 {
 	int32 LocalUserIndex = -1;
@@ -25,6 +27,8 @@ class MELEECOMBATSYSTEM_API UOnlineSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
   public:
+	FOnLogin OnLoginDelegate;
+
 	virtual bool ShouldCreateSubsystem(UObject* Outer) const override;
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;

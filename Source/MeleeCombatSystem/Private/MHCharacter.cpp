@@ -1,14 +1,11 @@
 // Melee Combat System. All Rights Reserved.
 
 #include "MHCharacter.h"
-#include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
-#include <EnhancedInputSubsystems.h>
-#include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
 #include "Net/UnrealNetwork.h"
 #include "Engine/Engine.h"
@@ -66,52 +63,6 @@ void AMHCharacter::BeginPlay()
 void AMHCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-}
-
-void AMHCharacter::NotifyControllerChanged()
-{
-	Super::NotifyControllerChanged();
-
-	// Add Input Mapping Context
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
-				ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			Subsystem->AddMappingContext(DefaultMappingContext, 0);
-		}
-	}
-}
-
-void AMHCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
-	{
-		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
-		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMHCharacter::Move);
-
-		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMHCharacter::Look);
-
-		// Fire
-		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &AMHCharacter::StartFire);
-		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &AMHCharacter::StopFire);
-	}
-	else
-	{
-		UE_LOG(LogTemp,
-			   Error,
-			   TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the "
-					"Enhanced Input system. If you "
-					"intend to use the legacy system, then you will need to update this C++ file."),
-			   *GetNameSafe(this));
-	}
 }
 
 void AMHCharacter::Move(const FInputActionValue& Value)

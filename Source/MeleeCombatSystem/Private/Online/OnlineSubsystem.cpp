@@ -140,6 +140,7 @@ void UOnlineSubsystem::HandleLogin(const UE::Online::TOnlineResult<UE::Online::F
 		const TSharedRef<UE::Online::FAccountInfo> AccountInfo = Result.GetOkValue().AccountInfo;
 		UE_LOG(LogOnlineSubsystem, Display, TEXT("login success"));
 		RegisterLocalOnlineUser(AccountInfo->PlatformUserId);
+		OnLoginDelegate.Broadcast();
 	}
 	else
 	{

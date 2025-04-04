@@ -23,3 +23,9 @@ AOnlinePlayerController* UOnlineGameInstance::GetPrimaryPlayerController() const
 {
 	return Cast<AOnlinePlayerController>(Super::GetPrimaryPlayerController(false));
 }
+
+void UOnlineGameInstance::UpdateState(EPlayerState NewState)
+{
+	State = NewState;
+	FOnStateChangedDelegate.Broadcast(NewState);
+}

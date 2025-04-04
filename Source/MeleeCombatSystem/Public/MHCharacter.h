@@ -8,8 +8,6 @@
 
 class USpringArmComponent;
 class UCameraComponent;
-class UInputMappingContext;
-class UInputAction;
 class AMHProjectile;
 struct FInputActionValue;
 
@@ -22,8 +20,6 @@ class MELEECOMBATSYSTEM_API AMHCharacter : public ACharacter
 	AMHCharacter();
 
 	virtual void Tick(float DeltaTime) override;
-
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	/** Property replication */
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -47,6 +43,17 @@ class MELEECOMBATSYSTEM_API AMHCharacter : public ACharacter
 					 struct FDamageEvent const& DamageEvent,
 					 AController* EventInstigator,
 					 AActor* DamageCauser) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Gameplay")
+	void StartFire();
+
+	/** Function for ending weapon fire. Once this is called, the player can use StartFire again.*/
+	UFUNCTION(BlueprintCallable, Category = "Gameplay")
+	void StopFire();
+
+	void Move(const FInputActionValue& Value);
+
+	void Look(const FInputActionValue& Value);
 
   protected:
 	/** The player's maximum health. This is the highest value of their health can be. This value is a value
@@ -78,12 +85,6 @@ class MELEECOMBATSYSTEM_API AMHCharacter : public ACharacter
 	bool bIsFiringWeapon;
 
 	/** Function for beginning weapon fire.*/
-	UFUNCTION(BlueprintCallable, Category = "Gameplay")
-	void StartFire();
-
-	/** Function for ending weapon fire. Once this is called, the player can use StartFire again.*/
-	UFUNCTION(BlueprintCallable, Category = "Gameplay")
-	void StopFire();
 
 	/** Server function for spawning projectiles.*/
 	UFUNCTION(Server, Reliable)
@@ -94,31 +95,10 @@ class MELEECOMBATSYSTEM_API AMHCharacter : public ACharacter
 
 	virtual void BeginPlay() override;
 
-	virtual void NotifyControllerChanged() override;
-
-	void Move(const FInputActionValue& Value);
-
-	void Look(const FInputActionValue& Value);
-
   private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputMappingContext* DefaultMappingContext;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* JumpAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* MoveAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* LookAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* FireAction;
 };
